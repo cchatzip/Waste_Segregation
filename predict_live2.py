@@ -7,13 +7,17 @@ from ultralytics import YOLO
 frame_width = 1280
 frame_height = 720
 
-model_path = os.path.join('.', 'runs', 'detect', 'train', 'weights', 'last.pt')
+model_path = 'C:/Users/Christos/Desktop/python/ODyolo/runs/detect/train2_300ep/weights/best.pt'
+# model_path = 'C:/Users/Christos/Desktop/python/ODyolo/runs/detect/train/weights/best_saved_model/best_float32.tflite'
 
 # Load the YOLOv8 model
 model = YOLO(model_path)
 
 # Live video capture
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
+
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, frame_width)
+# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, frame_height)
 
 # Loop through the video frames
 while cap.isOpened():
