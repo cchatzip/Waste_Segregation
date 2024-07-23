@@ -7,8 +7,8 @@ from ultralytics import YOLO
 frame_width = 1280
 frame_height = 720
 
-model_path = 'C:/Users/Christos/Desktop/python/ODyolo/runs/detect/train2_300ep/weights/best.pt'
-# model_path = 'C:/Users/Christos/Desktop/python/ODyolo/runs/detect/train/weights/best_saved_model/best_float32.tflite'
+model_path = os.path.join('.', 'runs', 'detect', 'train2_300ep', 'weights', 'best.pt')
+
 
 # Load the YOLOv8 model
 model = YOLO(model_path)

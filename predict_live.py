@@ -7,7 +7,7 @@ import supervision as sv
 frame_width = 1280
 frame_height = 720
 
-model_path = os.path.join('.', 'runs', 'detect', 'train', 'weights', 'last.pt')
+model_path = os.path.join('.', 'runs', 'detect', 'train2_300ep', 'weights', 'best.pt')
 
 def main():
     # Initialize video capture from default camera
