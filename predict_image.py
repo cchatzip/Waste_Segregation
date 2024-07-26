@@ -4,7 +4,7 @@ import supervision as sv
 from ultralytics import YOLO
 
 model_path = os.path.join('.', 'runs', 'detect', 'train2_300ep', 'weights', 'best.pt')
-image_path = 'C:/Users/Christos/Desktop/hdpe_test3.jpg'
+image_path = os.path.join('.', 'Test_Images', 'PET_bottles.jpg')
 
 model = YOLO(model_path)
 image = cv2.imread(image_path)
@@ -33,3 +33,6 @@ for class_id in detections.class_id:
 
 #Plotting the image
 sv.plot_image(annotated_image)
+
+cv2.imwrite('PET_bottles_detected.jpg', annotated_image) # Save the image
+
