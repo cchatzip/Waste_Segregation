@@ -7,3 +7,6 @@ yolov8n.pt
 
 #Prediction on video model
 predict_alpaca.py
+
+#pycache files
+__pycache__/
