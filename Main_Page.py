@@ -12,13 +12,13 @@ import Helper
 # Setting page layout
 st.set_page_config(
     page_title="Waste Segregation Project",
-    page_icon="🤖",
+    page_icon="🚀",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # Main page heading
-st.title("Waste Segregation Project")
+st.title("🚀 Waste Segregation Project 🚀")
 
 # Sidebar
 st.sidebar.header("ML Model Config")
@@ -94,3 +94,9 @@ elif source_radio == params.WEBCAM:
 
 else:
     st.error("Please select a valid source type!")
+
+st.markdown("""
+  <p style='text-align: center; font-size:16px; margin-top: 32px'>
+    Christodoulos Hadjipetrou - ISSEL @2024
+  </p>
+""", unsafe_allow_html=True)

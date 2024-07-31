@@ -7,7 +7,7 @@ import params
 
 st.set_page_config(page_title="Model Metrics", page_icon="📈")
 
-st.markdown("# Model Metrics")
+st.title("📈 Model Metrics")
 st.sidebar.header("Model Metrics")
 
 source_radio = st.sidebar.radio(
@@ -117,3 +117,9 @@ if source_radio == params.VALIDATION:
         except Exception as ex:
             st.error("Error occurred while opening the image.")
             st.error(ex)
+
+st.markdown("""
+  <p style='text-align: center; font-size:16px; margin-top: 32px'>
+    Christodoulos Hadjipetrou - ISSEL @2024
+  </p>
+""", unsafe_allow_html=True)
