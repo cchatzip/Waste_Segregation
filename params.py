@@ -21,8 +21,9 @@ METRICS_LIST = [CONFUSION_MATRIX, CURVES, LABELS, RESULTS, VALIDATION]
 
 # Images config
 IMAGES_DIR = os.path.join('.', 'Test_Images')
+PREDICTIONS_DIR = os.path.join('.', 'Predictions')
 DEFAULT_IMAGE = os.path.join(IMAGES_DIR, 'PET_bottles.jpg')
-DEFAULT_DETECT_IMAGE = os.path.join(IMAGES_DIR, 'PET_bottles_detected.jpg')
+DEFAULT_DETECT_IMAGE = os.path.join(PREDICTIONS_DIR, 'PET_bottles_detected.jpg')
 
 #Metrics Images config
 METRICS_DIR = os.path.join('.', 'runs', 'detect', 'train2_300ep')

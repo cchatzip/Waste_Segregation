@@ -1,7 +1,7 @@
 import os
 import re
 
-path = os.path.join('.', 'data', 'images', 'train')
+path = os.path.join(os.path.dirname( __file__ ),'..', 'data', 'images', 'train')
 regex_PET = re.compile('(.*a01.*jpg$)')
 regex_HDPE = re.compile('(.*a02.*jpg$)')
 regex_PP = re.compile('(.*a05.*jpg$)')

@@ -1,3 +1,9 @@
+"""
+The following script was created to make predictions on a single image.
+
+Simply change the image path with the correct one to make a prediction on an image.
+"""
+
 import os
 import cv2
 import supervision as sv
@@ -34,5 +40,11 @@ for class_id in detections.class_id:
 #Plotting the image
 sv.plot_image(annotated_image)
 
-cv2.imwrite('PET_bottles_detected.jpg', annotated_image) # Save the image
+
+
+
+
+
+# # Save the image
+# cv2.imwrite('PET_bottles_detected.jpg', annotated_image)
 
