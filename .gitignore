@@ -10,3 +10,9 @@ predict_alpaca.py
 
 #pycache files
 __pycache__/
+
+#Image folders by category
+data/images/HDPE/
+data/images/PET/
+data/images/PP/
+data/images/PS/
