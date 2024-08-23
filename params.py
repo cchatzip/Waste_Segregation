@@ -1,7 +1,7 @@
 import os
 
 # ML Model config
-MODEL_DIR = os.path.join('.', 'runs', 'detect', 'train2_300ep', 'weights')
+MODEL_DIR = os.path.join('.', 'runs', 'detect', 'train4_300ep_ReformedDataset', 'weights')
 DETECTION_MODEL = os.path.join(MODEL_DIR, 'best.pt')
 
 # Sources
@@ -22,11 +22,11 @@ METRICS_LIST = [CONFUSION_MATRIX, CURVES, LABELS, RESULTS, VALIDATION]
 # Images config
 IMAGES_DIR = os.path.join('.', 'Test_Images')
 PREDICTIONS_DIR = os.path.join('.', 'Predictions')
-DEFAULT_IMAGE = os.path.join(IMAGES_DIR, 'PET_bottles.jpg')
-DEFAULT_DETECT_IMAGE = os.path.join(PREDICTIONS_DIR, 'PET_bottles_detected.jpg')
+DEFAULT_IMAGE = os.path.join(IMAGES_DIR, 'Multiple_bottles3.jpg')
+DEFAULT_DETECT_IMAGE = os.path.join(PREDICTIONS_DIR, 'Multiple_bottles3_detected.jpg')
 
 #Metrics Images config
-METRICS_DIR = os.path.join('.', 'runs', 'detect', 'train2_300ep')
+METRICS_DIR = os.path.join('.', 'runs', 'detect', 'train4_300ep_ReformedDataset')
 
 CONF_MTRX = os.path.join(METRICS_DIR, 'confusion_matrix.png')
 CONF_MTRX_NORM = os.path.join(METRICS_DIR, 'confusion_matrix_normalized.png')

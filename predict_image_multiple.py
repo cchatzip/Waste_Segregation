@@ -13,7 +13,7 @@ import cv2
 import supervision as sv
 from ultralytics import YOLO
 
-model_path = os.path.join('.', 'runs', 'detect', 'train2_300ep', 'weights', 'best.pt')
+model_path = os.path.join('.', 'runs', 'detect', 'train4_300ep_ReformedDataset', 'weights', 'best.pt')
 images_path = os.path.join('.', 'Test_Images')
 
 

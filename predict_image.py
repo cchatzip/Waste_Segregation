@@ -9,8 +9,8 @@ import cv2
 import supervision as sv
 from ultralytics import YOLO
 
-model_path = os.path.join('.', 'runs', 'detect', 'train2_300ep', 'weights', 'best.pt')
-image_path = os.path.join('.', 'Test_Images', 'PET_bottles.jpg')
+model_path = os.path.join('.', 'runs', 'detect', 'train4_300ep_ReformedDataset', 'weights', 'best.pt')
+image_path = os.path.join('.', 'Test_Images', 'small_bottle4.jpg')
 
 model = YOLO(model_path)
 image = cv2.imread(image_path)
