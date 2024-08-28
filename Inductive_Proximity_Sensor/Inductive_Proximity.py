@@ -1,33 +1,36 @@
 import time
 import RPi.GPIO as GPIO
 
-# Pin of Input
-GPIOpin = -1
-
-# Initialize the input pin
-def initialInductive(pin):
-  global GPIOpin 
-  GPIOpin = pin
-  GPIO.setmode(GPIO.BCM)
-  GPIO.setup(GPIOpin,GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-  print("Finished Initiation")
-  print(GPIOpin)
-  
-# Detect Metal
-def detectMetal():
-  if(GPIOpin != -1):
-    state = GPIO.input(GPIOpin)
-    if state:
-      print("Metal Not Detected")
-    else :
-      print("Metal Detected")
-  else:
-    print("Please Initial Input Pin")
+class InductiveProximitySensor:
+    def __init__(self, pin):
+        self.pin = pin
+        self.initialized = False
     
-# test module
+    def initialize(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        self.initialized = True
+        print("Finished Initiation")
+        print(f"Input Pin: {self.pin}")
+    
+    def detect_metal(self):
+        if not self.initialized:
+            raise Exception("Sensor not initialized. Please call initialize() first.")
+        
+        state = GPIO.input(self.pin)
+        if state:
+            print("Metal Not Detected")
+        else:
+            print("Metal Detected")
+
+# Test module
 if __name__ == '__main__':
-  pin = 17
-  initialInductive(pin)
-  while True:
-    detectMetal()
-    time.sleep(0.2)  
+    sensor = InductiveProximitySensor(pin=17)
+    sensor.initialize()
+    
+    try:
+        while True:
+            sensor.detect_metal()
+            time.sleep(0.2)
+    except KeyboardInterrupt:
+        GPIO.cleanup()  # Ensure GPIO is cleaned up when the script is interrupted 
