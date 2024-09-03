@@ -33,15 +33,17 @@ class ObjectDetectionModel:
 
         
         # Displaying Class Prediction and confidence score
+        Highest_confidence = 0
+
         for index, class_id in enumerate(detections.class_id):
-            Highest_confidence = detections.confidence[0]
-            self.Detection = self.model.model.names[0]
+
             print(f"Detection: {self.model.model.names[class_id]}, Confidence: {detections.confidence[index]}")
             if detections.confidence[index] > Highest_confidence:
                 Highest_confidence = detections.confidence[index]
                 self.Detection = self.model.model.names[class_id]
         
         return annotated_image
+    
 
     def save_image(self, image, output_path):
         cv2.imwrite(output_path, image)

@@ -19,9 +19,9 @@ class InductiveProximitySensor:
         
         state = GPIO.input(self.pin)
         if state:
-            print("Metal Not Detected")
+            return
         else:
-            print("Metal Detected")
+            return 'Metal Detected'
 
 # Test module
 if __name__ == '__main__':
