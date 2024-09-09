@@ -30,7 +30,9 @@ if __name__ == '__main__':
     
     try:
         while True:
-            sensor.detect_metal()
+            result = sensor.detect_metal()
             time.sleep(0.2)
+            if result == 'Metal Detected':
+                print(result)
     except KeyboardInterrupt:
         GPIO.cleanup()  # Ensure GPIO is cleaned up when the script is interrupted 

@@ -9,6 +9,7 @@ class ObjectDetectionModel:
         self.bounding_box_annotator = sv.BoundingBoxAnnotator()
         self.label_annotator = sv.LabelAnnotator()
         self.Detection = 'Unknown'
+        self.Highest_confidence = 0
 
     def predict(self, image):
         results = self.model(image)[0]
@@ -33,13 +34,12 @@ class ObjectDetectionModel:
 
         
         # Displaying Class Prediction and confidence score
-        Highest_confidence = 0
 
         for index, class_id in enumerate(detections.class_id):
 
             print(f"Detection: {self.model.model.names[class_id]}, Confidence: {detections.confidence[index]}")
-            if detections.confidence[index] > Highest_confidence:
-                Highest_confidence = detections.confidence[index]
+            if detections.confidence[index] > self.Highest_confidence:
+                self.Highest_confidence = detections.confidence[index]
                 self.Detection = self.model.model.names[class_id]
         
         return annotated_image

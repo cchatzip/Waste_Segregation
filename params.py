@@ -4,28 +4,40 @@ import os
 MODEL_DIR = os.path.join('.', 'runs', 'detect', 'train4_300ep_ReformedDataset', 'weights')
 DETECTION_MODEL = os.path.join(MODEL_DIR, 'best.pt')
 
-# Sources
+# Sources (Main_Page)
 IMAGE = 'Image'
 WEBCAM = 'Webcam'
 
-# Model Metrics
+# Sources (Model_Metrics)
 CONFUSION_MATRIX = 'Confusion Matrix'
 CURVES = 'Curves'
 LABELS = 'Labels'
 RESULTS = 'Loss & MAP Plots'
 VALIDATION = 'Validation batches and Detections'
 
+# Sources (Recycling_Session)
+USERSESSION_DIR = os.path.join('.', 'User_Session')
+items = os.listdir(USERSESSION_DIR)
+
+if len(items) > 10:
+    latest_sessions = items[:10]
+else:
+    latest_sessions = items
+    
+
+
 SOURCES_LIST = [IMAGE, WEBCAM]
 METRICS_LIST = [CONFUSION_MATRIX, CURVES, LABELS, RESULTS, VALIDATION]
+SESSIONS_LIST = latest_sessions
 
 
-# Images config
+# Default Images config (Main_Page)
 IMAGES_DIR = os.path.join('.', 'Test_Images')
 PREDICTIONS_DIR = os.path.join('.', 'Predictions')
 DEFAULT_IMAGE = os.path.join(IMAGES_DIR, 'Multiple_bottles3.jpg')
 DEFAULT_DETECT_IMAGE = os.path.join(PREDICTIONS_DIR, 'Multiple_bottles3_detected.jpg')
 
-#Metrics Images config
+#Metrics Images config (Model_Metrics)
 METRICS_DIR = os.path.join('.', 'runs', 'detect', 'train4_300ep_ReformedDataset')
 
 CONF_MTRX = os.path.join(METRICS_DIR, 'confusion_matrix.png')

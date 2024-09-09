@@ -7,10 +7,12 @@
 import cv2
 from ultralytics import YOLO
 import streamlit as st
+import os
+import json
 
 import params
 
-
+#Load the ML model created with YOLO
 def load_model(model_path):
     """
     Loads a YOLO object detection model from the specified model_path.
@@ -24,7 +26,7 @@ def load_model(model_path):
     model = YOLO(model_path)
     return model
 
-
+#Main_Page function
 def display_tracker_options():
     display_tracker = st.radio("Display Tracker", ('Yes', 'No'))
     is_display_tracker = True if display_tracker == 'Yes' else False
@@ -34,7 +36,7 @@ def display_tracker_options():
     return is_display_tracker, None
 
 
-
+#Main_Page function to predict a given image
 def _display_detected_frames(conf, model, st_frame, image, is_display_tracking=None, tracker=None):
     """
     Display the detected objects on a video frame using the YOLOv8 model.
@@ -69,7 +71,7 @@ def _display_detected_frames(conf, model, st_frame, image, is_display_tracking=N
                    )
     
 
-
+#Main_Page function to start live inference
 def play_webcam(conf, model):
     """
     Plays a webcam stream. Detects Objects in real-time using the YOLOv8 object detection model.
@@ -105,3 +107,17 @@ def play_webcam(conf, model):
                     break
         except Exception as e:
             st.sidebar.error("Error loading video: " + str(e))
+
+
+#Function to load the json file from each user session (Recycling_Session page)
+def load_session_data(session_folder):
+    # Path to the JSON file within the selected session folder
+    json_file_path = os.path.join(params.USERSESSION_DIR, session_folder, 'session_data.json')
+    
+    # Load the JSON data
+    if os.path.exists(json_file_path):
+        with open(json_file_path, 'r') as f:
+            session_data = json.load(f)
+        return session_data
+    else:
+        return None
