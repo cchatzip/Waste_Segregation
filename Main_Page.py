@@ -25,7 +25,7 @@ st.sidebar.header("ML Model Config")
 
 # Model Options
 confidence = float(st.sidebar.slider(
-    "Select Model Confidence", 25, 100, 40)) / 100
+    "Select Model Confidence Threshold", 25, 100, 40)) / 100
 
 # Setting the model path
 model_path = Path(params.DETECTION_MODEL)
@@ -37,7 +37,7 @@ except Exception as ex:
     st.error(f"Unable to load model. Check the specified path: {model_path}")
     st.error(ex)
 
-st.sidebar.header("Image/Webcam Config")
+st.sidebar.header("Image Prediction")
 source_radio = st.sidebar.radio(
     "Select Source", params.SOURCES_LIST)
 
@@ -89,11 +89,12 @@ if source_radio == params.IMAGE:
                     st.write("No image is uploaded yet!")
 
 
-elif source_radio == params.WEBCAM:
-    Helper.play_webcam(confidence, model)
+'''Camera is working only when streamlit runs locally'''
+# elif source_radio == params.WEBCAM:
+#     Helper.play_webcam(confidence, model)
 
-else:
-    st.error("Please select a valid source type!")
+# else:
+#     st.error("Please select a valid source type!")
 
 st.markdown("""
   <p style='text-align: center; font-size:16px; margin-top: 32px'>

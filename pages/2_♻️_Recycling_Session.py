@@ -9,10 +9,10 @@ st.title("♻️ Recycling Session")
 st.sidebar.header("Recycling Session")
 
 st.write(
-    """This page is dedicated on showing the results of the different user sessions which automatically get uploaded when the system is used."""
+    """This page is dedicated on showing the results of the different user sessions when they use the recycling system."""
 )
 
-source_radio = st.sidebar.radio("Select an Option", params.SESSIONS_LIST)
+source_radio = st.sidebar.radio("Select a Session to display", params.SESSIONS_LIST)
 
 # Check if the user selected a session
 if source_radio:

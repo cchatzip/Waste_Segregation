@@ -1,0 +1,30 @@
+{
+    "session_id": "1725988204",
+    "timestamp": "2024-09-10T20:10:04.107005",
+    "session_dir": "./User_Session/1725988204",
+    "objects": [
+        {
+            "type": "PET",
+            "confidence": 0.852895200252533,
+            "image_before": "./User_Session/1725988204/RPI_img1.jpg",
+            "image_after": "./User_Session/1725988204/RPI_Prediction1.jpg"
+        },
+        {
+            "type": "PET",
+            "confidence": 0.8772869110107422,
+            "image_before": "./User_Session/1725988204/RPI_img2.jpg",
+            "image_after": "./User_Session/1725988204/RPI_Prediction2.jpg"
+        },
+        {
+            "type": "PET",
+            "confidence": 0.9516854882240295,
+            "image_before": "./User_Session/1725988204/RPI_img3.jpg",
+            "image_after": "./User_Session/1725988204/RPI_Prediction3.jpg"
+        }
+    ],
+    "analytics": {
+        "total_objects": 3,
+        "metal_objects": 0,
+        "plastic_objects": 3
+    }
+}

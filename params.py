@@ -6,7 +6,7 @@ DETECTION_MODEL = os.path.join(MODEL_DIR, 'best.pt')
 
 # Sources (Main_Page)
 IMAGE = 'Image'
-WEBCAM = 'Webcam'
+WEBCAM = 'Webcam' #(Working only when streamlit runs locally)
 
 # Sources (Model_Metrics)
 CONFUSION_MATRIX = 'Confusion Matrix'
@@ -26,7 +26,7 @@ else:
     
 
 
-SOURCES_LIST = [IMAGE, WEBCAM]
+SOURCES_LIST = [IMAGE]
 METRICS_LIST = [CONFUSION_MATRIX, CURVES, LABELS, RESULTS, VALIDATION]
 SESSIONS_LIST = latest_sessions
 

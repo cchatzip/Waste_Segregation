@@ -8,7 +8,7 @@ from Inductive_Proximity_Sensor import Inductive_Proximity # Metal detection fun
 import Predict_Frame # Your YOLO detection function
 
 
-def capture_image(camera, session_data):
+def capture_image(camera, session_data, obj_num):
     print("Live camera feed is active. Press 'Enter' to capture the image.")
     
     while True:
@@ -26,7 +26,7 @@ def capture_image(camera, session_data):
             cv2.destroyWindow('Live Camera Feed')  # Close the live feed window
 
             #Save the image before classifying it
-            ImgBefore_save_path = os.path.join(session_data["session_dir"], 'RPI_img.jpg')
+            ImgBefore_save_path = os.path.join(session_data["session_dir"], f'RPI_img{obj_num}.jpg')
             cv2.imwrite(ImgBefore_save_path, frame)
 
             return frame, ImgBefore_save_path
@@ -37,7 +37,7 @@ def capture_image(camera, session_data):
             cv2.destroyWindow('Live Camera Feed')
             return None
         
-def classify_object(image, gpio, model_path, session_data, ImgBefore_path):
+def classify_object(image, gpio, model_path, session_data, ImgBefore_path, obj_num):
 
     # 1. Detect if the object is metal
 
@@ -50,7 +50,7 @@ def classify_object(image, gpio, model_path, session_data, ImgBefore_path):
         print("Metal detected. Object is classified as 'Metal'.")
 
         #Save the image with a header classifying it as metal
-        ImgAfter_path = os.path.join(session_data["session_dir"], 'RPI_Prediction.jpg')
+        ImgAfter_path = os.path.join(session_data["session_dir"], f'RPI_Prediction{obj_num}.jpg')
         cv2.putText(image, "Classification: Metal", (10, 30), 
         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
         cv2.imwrite(ImgAfter_path, image)
@@ -69,7 +69,7 @@ def classify_object(image, gpio, model_path, session_data, ImgBefore_path):
     detector = Predict_Frame.ObjectDetectionModel(model_path)
     detector.predict(image)
 
-    ImgAfter_path = os.path.join(session_data["session_dir"], 'RPI_Prediction.jpg')
+    ImgAfter_path = os.path.join(session_data["session_dir"], f'RPI_Prediction{obj_num}.jpg')
     cv2.putText(image, f"Classification: {detector.Detection}", (10, 30), 
     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
     detector.save_image(image, ImgAfter_path)
@@ -129,6 +129,8 @@ def main_system():
     session_dir = create_session_directory(session_data["session_id"])
     session_data.update({'session_dir': session_dir})
 
+    counter = 1
+
     
     while True:
 
@@ -140,14 +142,14 @@ def main_system():
         time.sleep(2)  # Allow the camera to warm up
         
         # 3. Capture a single image
-        image, ImgBefore_path = capture_image(camera, session_data)
+        image, ImgBefore_path = capture_image(camera, session_data, counter)
         camera.release()
         if image is None:
             print("No image captured. Exiting...")
             break
         
         # 4. Classify the object
-        classification_result = classify_object(image, proximity_sensor_pin, model_path, session_data, ImgBefore_path)
+        classification_result = classify_object(image, proximity_sensor_pin, model_path, session_data, ImgBefore_path, counter)
         
         # 5. Display the classification result
         print(f"Classification Result: {classification_result}")
@@ -165,6 +167,9 @@ def main_system():
         if continue_processing != 'y':
             save_session_data(session_data)
             break
+
+        #Increase the counter variable so the images are being saved with a unique name
+        counter+=1
     
     # Cleanup
     camera.release()

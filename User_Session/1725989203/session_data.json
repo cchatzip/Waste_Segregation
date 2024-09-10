@@ -1,0 +1,42 @@
+{
+    "session_id": "1725989203",
+    "timestamp": "2024-09-10T20:26:43.389833",
+    "session_dir": "./User_Session/1725989203",
+    "objects": [
+        {
+            "type": "HDPE",
+            "confidence": 0.8607782125473022,
+            "image_before": "./User_Session/1725989203/RPI_img1.jpg",
+            "image_after": "./User_Session/1725989203/RPI_Prediction1.jpg"
+        },
+        {
+            "type": "PS",
+            "confidence": 0.5180042386054993,
+            "image_before": "./User_Session/1725989203/RPI_img2.jpg",
+            "image_after": "./User_Session/1725989203/RPI_Prediction2.jpg"
+        },
+        {
+            "type": "HDPE",
+            "confidence": 0.9664061069488525,
+            "image_before": "./User_Session/1725989203/RPI_img3.jpg",
+            "image_after": "./User_Session/1725989203/RPI_Prediction3.jpg"
+        },
+        {
+            "type": "HDPE",
+            "confidence": 0.5008907318115234,
+            "image_before": "./User_Session/1725989203/RPI_img4.jpg",
+            "image_after": "./User_Session/1725989203/RPI_Prediction4.jpg"
+        },
+        {
+            "type": "PET",
+            "confidence": 0.4543328881263733,
+            "image_before": "./User_Session/1725989203/RPI_img5.jpg",
+            "image_after": "./User_Session/1725989203/RPI_Prediction5.jpg"
+        }
+    ],
+    "analytics": {
+        "total_objects": 5,
+        "metal_objects": 0,
+        "plastic_objects": 5
+    }
+}

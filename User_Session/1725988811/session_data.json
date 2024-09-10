@@ -1,0 +1,18 @@
+{
+    "session_id": "1725988811",
+    "timestamp": "2024-09-10T20:20:11.777694",
+    "session_dir": "./User_Session/1725988811",
+    "objects": [
+        {
+            "type": "PP",
+            "confidence": 0.9583412408828735,
+            "image_before": "./User_Session/1725988811/RPI_img1.jpg",
+            "image_after": "./User_Session/1725988811/RPI_Prediction1.jpg"
+        }
+    ],
+    "analytics": {
+        "total_objects": 1,
+        "metal_objects": 0,
+        "plastic_objects": 1
+    }
+}
