@@ -89,7 +89,7 @@ if source_radio == params.IMAGE:
                     st.write("No image is uploaded yet!")
 
 
-'''Camera is working only when streamlit runs locally'''
+#Camera is working only when streamlit runs locally
 # elif source_radio == params.WEBCAM:
 #     Helper.play_webcam(confidence, model)
 
