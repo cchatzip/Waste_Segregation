@@ -13,8 +13,8 @@ import cv2
 import supervision as sv
 from ultralytics import YOLO
 
-model_path = os.path.join('.', 'runs', 'detect', 'train4_300ep_ReformedDataset', 'weights', 'best.pt')
-images_path = os.path.join('.', 'Test_Images')
+model_path = os.path.join(os.path.dirname( __file__ ), '..', 'runs', 'detect', 'train4_300ep_ReformedDataset', 'weights', 'best.pt')
+images_path = os.path.join(os.path.dirname( __file__ ), '..', 'Test_Images')
 
 
 items = os.listdir(images_path)
@@ -56,7 +56,7 @@ for i in range(len(items)):
 
 
     # Save the image
-    Saving_path = os.path.join('.', 'Predictions', test_img)
+    Saving_path = os.path.join(os.path.dirname( __file__ ), '..', 'Predictions', test_img)
 
     cv2.imwrite(Saving_path, annotated_image) 
 

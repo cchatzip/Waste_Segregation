@@ -89,12 +89,12 @@ if source_radio == params.IMAGE:
                     st.write("No image is uploaded yet!")
 
 
-#Camera is working only when streamlit runs locally
-# elif source_radio == params.WEBCAM:
-#     Helper.play_webcam(confidence, model)
+# Camera is working only when streamlit runs locally
+elif source_radio == params.WEBCAM:
+    Helper.play_webcam(confidence, model)
 
-# else:
-#     st.error("Please select a valid source type!")
+else:
+    st.error("Please select a valid source type!")
 
 st.markdown("""
   <p style='text-align: center; font-size:16px; margin-top: 32px'>

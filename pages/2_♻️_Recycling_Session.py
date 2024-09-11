@@ -1,12 +1,75 @@
 import streamlit as st
+import subprocess
+import time
 
 import params
 import Helper
+import Main_System
 
 st.set_page_config(page_title="Recycling Session", page_icon="♻️")
 
 st.title("♻️ Recycling Session")
-st.sidebar.header("Recycling Session")
+
+#TO-DO: CALL THE MAIN SYSTEM SCRIPT FROM STREAMLIT
+st.sidebar.header("Initiate a New Recycling Session")
+# Button to start the script
+if st.button('Start'):
+    # Inform the user that the process is starting
+    st.info("Starting the Main System Script...")
+
+    # Placeholder for output
+    output_placeholder = st.empty()
+
+    # Create a container to display logs
+    log_container = st.container()
+    log_container.subheader("Real-Time Logs")
+
+    # Create a progress bar
+    progress_bar = st.progress(0)
+    
+    # Run the script using subprocess
+    process = subprocess.Popen(
+        ['python3', 'Main_System.py'],  # Adjust with the correct path if needed
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+
+    # Read the output in real-time
+    total_lines = 0
+    for line in iter(process.stdout.readline, ''):
+        total_lines += 1
+        # Format and display output
+        if "Error" in line or "Exception" in line:
+            log_container.error(line.strip())
+        elif "Warning" in line:
+            log_container.warning(line.strip())
+        else:
+            log_container.write(line.strip())
+        
+        # Update progress bar based on some heuristic (total_lines or another metric)
+        progress_bar.progress(min(total_lines % 100, 100) / 100)  # Example logic to fill progress bar
+
+        time.sleep(0.2)  # Add a short delay to reduce the frequency of updates
+
+    # Close the process
+    process.stdout.close()
+    process.wait()
+
+    # Finish progress
+    progress_bar.progress(100)
+    st.success("Main Script Finished Running Successfully!")
+
+    # Display a final message
+    st.balloons()  # Fun addition: display balloons when done
+
+
+
+
+
+
+#Sessions List
+st.sidebar.header("Recycling Sessions list")
 
 st.write(
     """This page is dedicated on showing the results of the different user sessions when they use the recycling system."""

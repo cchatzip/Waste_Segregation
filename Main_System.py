@@ -27,7 +27,7 @@ def capture_image(camera, session_data, obj_num):
 
             #Save the image before classifying it
             ImgBefore_save_path = os.path.join(session_data["session_dir"], f'RPI_img{obj_num}.jpg')
-            cv2.imwrite(ImgBefore_save_path, frame)
+            cv2.imwrite(ImgBefore_save_path, frame) #Save the image before classification
 
             return frame, ImgBefore_save_path
         
@@ -53,7 +53,7 @@ def classify_object(image, gpio, model_path, session_data, ImgBefore_path, obj_n
         ImgAfter_path = os.path.join(session_data["session_dir"], f'RPI_Prediction{obj_num}.jpg')
         cv2.putText(image, "Classification: Metal", (10, 30), 
         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
-        cv2.imwrite(ImgAfter_path, image)
+        cv2.imwrite(ImgAfter_path, image) #Save image after classification
 
         # Append result to session data
         session_data['objects'].append({
@@ -72,7 +72,7 @@ def classify_object(image, gpio, model_path, session_data, ImgBefore_path, obj_n
     ImgAfter_path = os.path.join(session_data["session_dir"], f'RPI_Prediction{obj_num}.jpg')
     cv2.putText(image, f"Classification: {detector.Detection}", (10, 30), 
     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
-    detector.save_image(image, ImgAfter_path)
+    detector.save_image(image, ImgAfter_path) #Save the image after classification
 
     # Append result to session data
     session_data['objects'].append({
