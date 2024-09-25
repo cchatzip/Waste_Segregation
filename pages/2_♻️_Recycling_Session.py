@@ -1,74 +1,54 @@
 import streamlit as st
-import subprocess
 import time
 
 import params
 import Helper
-import Main_System
+import Main_SystemStreamlit
 
+# Set Streamlit page configuration
 st.set_page_config(page_title="Recycling Session", page_icon="♻️")
 
+# Set the main title of the page
 st.title("♻️ Recycling Session")
 
-#TO-DO: CALL THE MAIN SYSTEM SCRIPT FROM STREAMLIT
+
+#===============INITIATE A NEW RECYCLING SESSION ====================
+
+
+# Session state to track whether the system is running
+if "session_active" not in st.session_state:
+    st.session_state.session_active = False  # Whether the session is currently running
+if "session_complete" not in st.session_state:
+    st.session_state.session_complete = False  # Whether the session has been completed
+
+# Sidebar for session initiation
 st.sidebar.header("Initiate a New Recycling Session")
-# Button to start the script
-if st.button('Start'):
-    # Inform the user that the process is starting
-    st.info("Starting the Main System Script...")
 
-    # Placeholder for output
-    output_placeholder = st.empty()
+# Button to start the recycling session
+if not st.session_state.session_active and not st.session_state.session_complete:
+    if st.sidebar.button('Start Session'):
+        st.session_state.session_active = True  # Mark session as active
+        st.session_state.session_complete = False  # Reset the session complete flag
+        st.sidebar.empty()  # Optionally clear the sidebar
 
-    # Create a container to display logs
-    log_container = st.container()
-    log_container.subheader("Real-Time Logs")
-
-    # Create a progress bar
-    progress_bar = st.progress(0)
-    
-    # Run the script using subprocess
-    process = subprocess.Popen(
-        ['python3', 'Main_System.py'],  # Adjust with the correct path if needed
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
-    )
-
-    # Read the output in real-time
-    total_lines = 0
-    for line in iter(process.stdout.readline, ''):
-        total_lines += 1
-        # Format and display output
-        if "Error" in line or "Exception" in line:
-            log_container.error(line.strip())
-        elif "Warning" in line:
-            log_container.warning(line.strip())
-        else:
-            log_container.write(line.strip())
+# Check if the session is active
+if st.session_state.session_active:
+        st.write("Starting new recycling session...")
         
-        # Update progress bar based on some heuristic (total_lines or another metric)
-        progress_bar.progress(min(total_lines % 100, 100) / 100)  # Example logic to fill progress bar
+        # Add a spinner for visual feedback during long-running processes
+        with st.spinner('Processing...'):
+            Main_SystemStreamlit.main_system()
 
-        time.sleep(0.2)  # Add a short delay to reduce the frequency of updates
+        # Once processing is done
+        st.success("Session finished!")
+        st.session_state.session_active = False  # Mark session as no longer active
+        st.session_state.session_complete = True  # Mark the session as complete
 
-    # Close the process
-    process.stdout.close()
-    process.wait()
-
-    # Finish progress
-    progress_bar.progress(100)
-    st.success("Main Script Finished Running Successfully!")
-
-    # Display a final message
-    st.balloons()  # Fun addition: display balloons when done
+#=========================================================================
 
 
+#=========================Sessions List==================================
 
-
-
-
-#Sessions List
 st.sidebar.header("Recycling Sessions list")
 
 st.write(

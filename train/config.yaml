@@ -1,4 +1,4 @@
-path: C:/Users/Christos/Desktop/python/ODyolo/data  # dataset root dir
+path: /home/c/cchatzip/Desktop/Waste_Segregation/data  # dataset root dir
 train: images/train  # train images (relative to 'path')
 val: images/val  # val images (relative to 'path')
 
@@ -8,3 +8,4 @@ names:
   1: HDPE
   2: PP
   3: PS
+  4: Metal

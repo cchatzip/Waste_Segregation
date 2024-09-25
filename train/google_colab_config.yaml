@@ -1,6 +1,6 @@
-path: '/content/gdrive/My Drive/ODyolo'  # dataset root dir
-train: images/train  # train images (relative to 'path')
-val: images/val  # val images (relative to 'path')
+path: '/content/gdrive/My Drive/ODyolo_AddedMetalCategory'  # dataset root dir
+train: data/images/train  # train images (relative to 'path')
+val: data/images/val  # val images (relative to 'path')
 
 # Classes
 names:
@@ -8,3 +8,4 @@ names:
   1: HDPE
   2: PP
   3: PS
+  4: Metal

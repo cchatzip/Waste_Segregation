@@ -3,9 +3,31 @@ import cv2
 import os
 import json
 from datetime import datetime
+import streamlit as st
 
 from Inductive_Proximity_Sensor import Inductive_Proximity # Metal detection function
+from utils import Image_Modification
 import Predict_Frame # Your YOLO detection function
+
+
+def image_preprocessing(Unprocessed_img_path, session_data, obj_num):
+    #Extract the object first
+    background_image_path = os.path.join(os.path.dirname( __file__ ), 'Background_modification', 'Background.jpg')
+
+    extracted_result = Image_Modification.remove_background(Unprocessed_img_path, background_image_path)
+    extracted_image_path = os.path.join(os.path.dirname( __file__ ), 'Background_modification', 'Extracted_object', 'extracted_result.png')
+
+    #Save the image with extracted object
+    cv2.imwrite(extracted_image_path, extracted_result)
+
+    #Add new background
+    new_background_path = os.path.join(os.path.dirname( __file__ ), 'Background_modification', 'Black_background.jpg')
+
+    Img_Modified = Image_Modification.place_on_new_background(extracted_image_path, new_background_path)
+    Img_Modified_path = os.path.join(session_data["session_dir"], f'RPI_ImgModified{obj_num}.jpg')
+    Img_Modified.save(Img_Modified_path)
+
+    return Img_Modified_path
 
 
 def capture_image(camera, session_data, obj_num):
@@ -37,7 +59,10 @@ def capture_image(camera, session_data, obj_num):
             cv2.destroyWindow('Live Camera Feed')
             return None
         
-def classify_object(image, gpio, model_path, session_data, ImgBefore_path, obj_num):
+def classify_object(gpio, model_path, session_data, ImgBefore_path, obj_num):
+    
+    #Load the modified image
+    image = cv2.imread(ImgBefore_path)
 
     # 1. Detect if the object is metal
 
@@ -67,7 +92,7 @@ def classify_object(image, gpio, model_path, session_data, ImgBefore_path, obj_n
     
     # 2. Run YOLO object detection for non-metallic objects
     detector = Predict_Frame.ObjectDetectionModel(model_path)
-    detector.predict(image)
+    detector.predict_class(image)
 
     ImgAfter_path = os.path.join(session_data["session_dir"], f'RPI_Prediction{obj_num}.jpg')
     cv2.putText(image, f"Classification: {detector.Detection}", (10, 30), 
@@ -108,10 +133,10 @@ def create_session_directory(session_id):
         os.makedirs(path)
     return path
 
-
+#Main function of the system (The brain of the system)
 def main_system():
     proximity_sensor_pin = 17  # Initialize your proximity sensor here
-    model_path = os.path.join('.', 'runs', 'detect', 'train4_300ep_ReformedDataset', 'weights', 'best.pt')
+    model_path = os.path.join('.', 'runs', 'detect', 'train4_MetalCategoryAdded_300ep', 'weights', 'best.pt')
 
     #Initialize session data
     session_data = {
@@ -129,7 +154,7 @@ def main_system():
     session_dir = create_session_directory(session_data["session_id"])
     session_data.update({'session_dir': session_dir})
 
-    counter = 1
+    counter = 1 #The counter is used to keep track of the objects entered the system and save the images appropriately
 
     
     while True:
@@ -142,19 +167,22 @@ def main_system():
         time.sleep(2)  # Allow the camera to warm up
         
         # 3. Capture a single image
-        image, ImgBefore_path = capture_image(camera, session_data, counter)
+        image, CapturedImg_path = capture_image(camera, session_data, counter)
         camera.release()
         if image is None:
             print("No image captured. Exiting...")
             break
         
-        # 4. Classify the object
-        classification_result = classify_object(image, proximity_sensor_pin, model_path, session_data, ImgBefore_path, counter)
+        # 4. Image Preprocessing
+        ProcessedImg_path = image_preprocessing(CapturedImg_path, session_data, counter)
+
+        # 5. Classify the object
+        classification_result = classify_object(proximity_sensor_pin, model_path, session_data, ProcessedImg_path, counter)
         
-        # 5. Display the classification result
+        # 6. Display the classification result
         print(f"Classification Result: {classification_result}")
 
-        # 6. Update analytics
+        # 7. Update analytics
         session_data['analytics']['total_objects'] += 1
         if classification_result == "Metal":
             session_data['analytics']['metal_objects'] += 1
