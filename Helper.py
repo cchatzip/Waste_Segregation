@@ -111,8 +111,10 @@ def play_webcam(conf, model):
 
 #Function to load the json file from each user session (Recycling_Session page)
 def load_session_data(session_folder):
+
     # Path to the JSON file within the selected session folder
-    json_file_path = os.path.join(params.USERSESSION_DIR, session_folder, 'session_data.json')
+    usersession_dir = os.path.join('.', 'User_Session')
+    json_file_path = os.path.join(usersession_dir, session_folder, 'session_data.json')
     
     # Load the JSON data
     if os.path.exists(json_file_path):

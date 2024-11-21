@@ -13,8 +13,9 @@ import cv2
 import supervision as sv
 from ultralytics import YOLO
 
-model_path = os.path.join(os.path.dirname( __file__ ), '..', 'runs', 'detect', 'train4_300ep_ReformedDataset', 'weights', 'best.pt')
-images_path = os.path.join(os.path.dirname( __file__ ), '..', 'Test_Images')
+model_path = os.path.join(os.path.dirname( __file__ ), '..', 'runs', 'detect', 'final_model_150ep', 'weights', 'best.pt')
+# images_path = os.path.join(os.path.dirname( __file__ ), '..', 'data', 'images', 'test')
+images_path = os.path.join(os.path.dirname( __file__ ), '..', 'Predictions', 'Mainpage_defaultPhotos_Streamlit')
 
 
 items = os.listdir(images_path)
@@ -28,7 +29,7 @@ for i in range(len(items)):
 
     model = YOLO(model_path)
     image = cv2.imread(TestImg_path)
-    results = model(image)[0]
+    results = model.predict(image, conf=0.5)[0]
     detections = sv.Detections.from_ultralytics(results)
 
     bounding_box_annotator = sv.BoundingBoxAnnotator()
@@ -56,7 +57,7 @@ for i in range(len(items)):
 
 
     # Save the image
-    Saving_path = os.path.join(os.path.dirname( __file__ ), '..', 'Predictions', test_img)
+    Saving_path = os.path.join(os.path.dirname( __file__ ), '..', 'Predictions', '150ep_model', test_img)
 
     cv2.imwrite(Saving_path, annotated_image) 
 

@@ -1,7 +1,7 @@
 import os
 
 # ML Model config
-MODEL_DIR = os.path.join('.', 'runs', 'detect', 'train4_300ep_ReformedDataset', 'weights')
+MODEL_DIR = os.path.join('.', 'runs', 'detect', 'final_model_150ep', 'weights')
 DETECTION_MODEL = os.path.join(MODEL_DIR, 'best.pt')
 
 # Sources (Main_Page)
@@ -15,30 +15,18 @@ LABELS = 'Labels'
 RESULTS = 'Loss & MAP Plots'
 VALIDATION = 'Validation batches and Detections'
 
-# Sources (Recycling_Session)
-USERSESSION_DIR = os.path.join('.', 'User_Session')
-items = os.listdir(USERSESSION_DIR)
-
-if len(items) > 10:
-    latest_sessions = items[:10]
-else:
-    latest_sessions = items
-    
-
-
 SOURCES_LIST = [IMAGE, WEBCAM]
 METRICS_LIST = [CONFUSION_MATRIX, CURVES, LABELS, RESULTS, VALIDATION]
-SESSIONS_LIST = latest_sessions
+
 
 
 # Default Images config (Main_Page)
-IMAGES_DIR = os.path.join('.', 'Test_Images')
-PREDICTIONS_DIR = os.path.join('.', 'Predictions')
-DEFAULT_IMAGE = os.path.join(IMAGES_DIR, 'Multiple_bottles3.jpg')
-DEFAULT_DETECT_IMAGE = os.path.join(PREDICTIONS_DIR, 'Multiple_bottles3_detected.jpg')
+IMAGES_DIR = os.path.join('.', 'Predictions', 'Mainpage_defaultPhotos_Streamlit')
+DEFAULT_IMAGE = os.path.join(IMAGES_DIR, 'a01_MultipleBottles2.png')
+DEFAULT_DETECT_IMAGE = os.path.join(IMAGES_DIR, 'a01_MultipleBottles2_Detected.png')
 
 #Metrics Images config (Model_Metrics)
-METRICS_DIR = os.path.join('.', 'runs', 'detect', 'train4_300ep_ReformedDataset')
+METRICS_DIR = os.path.join('.', 'runs', 'detect', 'final_model_150ep')
 
 CONF_MTRX = os.path.join(METRICS_DIR, 'confusion_matrix.png')
 CONF_MTRX_NORM = os.path.join(METRICS_DIR, 'confusion_matrix_normalized.png')

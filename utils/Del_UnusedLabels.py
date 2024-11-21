@@ -1,7 +1,7 @@
 import os
 import re
 
-Images_path = os.path.join(os.path.dirname( __file__ ),'..', 'data', 'images', 'train')
+Images_path = os.path.join(os.path.dirname( __file__ ),'..', 'data', 'images', 'val')
 
 
 items = os.listdir(Images_path)
@@ -9,7 +9,7 @@ items = [i.split(".")[0] for i in items]
 # print(items)
 
 
-Labels_path = os.path.join(os.path.dirname( __file__ ),'..', 'data', 'labels', 'train')
+Labels_path = os.path.join(os.path.dirname( __file__ ),'..', 'data', 'labels', 'val')
 
 labels = os.listdir(Labels_path)
 labels = [i.split(".")[0] for i in labels]

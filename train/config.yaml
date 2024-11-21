@@ -1,6 +1,7 @@
-path: /home/c/cchatzip/Desktop/Waste_Segregation/data  # dataset root dir
+path: /home/cchatzip/Desktop/Theses_files/Waste_Segregation/data # dataset root dir
 train: images/train  # train images (relative to 'path')
 val: images/val  # val images (relative to 'path')
+test: images/test # test images (relative to 'path')
 
 # Classes
 names:

@@ -2,11 +2,12 @@ import os
 import re
 import shutil
 
-path = os.path.join(os.path.dirname( __file__ ),'..', 'data', 'images', 'Wadaba_blend')
-regex_PET = re.compile('(.*a01.*jpg$)')
-regex_HDPE = re.compile('(.*a02.*jpg$)')
-regex_PP = re.compile('(.*a05.*jpg$)')
-regex_PS = re.compile('(.*a06.*jpg$)')
+path = os.path.join(os.path.dirname( __file__ ),'..', 'data', 'images', 'val')
+regex_PET = re.compile('(.*a01.*png$)')
+regex_HDPE = re.compile('(.*a02.*png$)')
+regex_PP = re.compile('(.*a05.*png$)')
+regex_PS = re.compile('(.*a06.*png$)')
+regex_METAL = re.compile('(.*a07.*png$)')
 
 items = os.listdir(path)
 
@@ -14,6 +15,7 @@ PET_num = 0
 HDPE_num = 0
 PS_num = 0
 PP_num = 0
+METAL_num = 0
 
 for i in range(len(items)):
 
@@ -39,6 +41,11 @@ for i in range(len(items)):
     elif regex_PS.match(items[i]):
         PS_num += 1
         destination_directory = os.path.join(os.path.dirname( __file__ ),'..', 'data', 'images', 'PS', file_to_copy)
+        shutil.copy(source_directory, destination_directory)
+    
+    elif regex_METAL.match(items[i]):
+        METAL_num += 1
+        destination_directory = os.path.join(os.path.dirname( __file__ ),'..', 'data', 'images', 'METAL', file_to_copy)
         shutil.copy(source_directory, destination_directory)
 
 

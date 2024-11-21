@@ -10,13 +10,13 @@ import Predict_Frame
 
 def create_session_directory(session_id):
     """Create a unique directory for storing session images if not already created."""
-    if 'session_dir' not in st.session_state:   #Ensure that during runtime only one folder per session is created
-        directory = session_id
-        path = os.path.join('.', 'User_Session', directory) 
-        if not os.path.exists(path):
-            os.makedirs(path)
-        st.session_state['session_dir'] = path
-    return st.session_state['session_dir']
+
+    directory = session_id
+    path = os.path.join('.', 'User_Session', directory) 
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    return path
 
 
 def initialize_session_data():
@@ -41,13 +41,15 @@ def save_session_data(session_data):
 
 
 def capture_image(camera, session_data, obj_num):
-    st.write("Live camera feed is active.")
 
     ImgBefore_save_path = os.path.join(session_data["session_dir"], f'RPI_img{obj_num}.jpg')
 
     # Create a placeholder for the image and the buttons
-    image_placeholder = st.empty()
-    buttons_placeholder = st.empty()
+    # Initialize the placeholders in session_state if not already
+    if 'image_placeholder' not in st.session_state:
+        st.session_state['image_placeholder'] = st.empty()
+    if 'buttons_placeholder' not in st.session_state:
+        st.session_state['buttons_placeholder'] = st.empty()
 
     # Initialize the session state for capturing or canceling
     if f"image_captured_{obj_num}" not in st.session_state:
@@ -55,22 +57,23 @@ def capture_image(camera, session_data, obj_num):
     if f"capture_cancelled_{obj_num}" not in st.session_state:
         st.session_state[f"capture_cancelled_{obj_num}"] = False
 
-    with buttons_placeholder:
+    with st.session_state['buttons_placeholder']:
         # Display the buttons
         col1, col2 = st.columns(2)
 
         with col1:
-            if st.button("Capture Image", key=f"capture_image_{obj_num}"):
+            if st.button("Make Prediction", key=f"make_prediction_{obj_num}"):
                 st.session_state[f"image_captured_{obj_num}"] = True  # Update state on capture
 
         with col2:
-            if st.button("Cancel Capture", key=f"cancel_capture_{obj_num}"):
+            if st.button("Cancel Session", key=f"cancel_session_{obj_num}"):
                 st.session_state[f"capture_cancelled_{obj_num}"] = True  # Update state on cancel
 
     frame = None  # Initialize frame
 
     # Continuously update the image feed
     while not st.session_state[f"image_captured_{obj_num}"] and not st.session_state[f"capture_cancelled_{obj_num}"]:
+
         ret, frame = camera.read()
         if not ret:
             st.error("Failed to capture image")
@@ -78,7 +81,7 @@ def capture_image(camera, session_data, obj_num):
             break  # Exit the loop if frame capture fails
 
         # Update the image in the placeholder
-        image_placeholder.image(frame, channels="BGR", use_column_width=True)
+        st.session_state['image_placeholder'].image(frame, channels="BGR", use_column_width=True)
         st.session_state[f"last_frame_{obj_num}"] = frame  # Save the last frame using Streamlit session_state
 
         time.sleep(0.1)  # Avoid high CPU usage by adding a small delay
@@ -95,12 +98,16 @@ def capture_image(camera, session_data, obj_num):
     camera.release()  # Release camera when done
 
     if st.session_state[f"capture_cancelled_{obj_num}"]:
-        st.warning("Capture canceled.")
+        st.warning("Session canceled.")
+
+        #Empty the placeholders
+        st.session_state['image_placeholder'].empty()
+        st.session_state['buttons_placeholder'].empty()
         return None, None  # Indicate cancellation
     
     #Empty the placeholders
-    image_placeholder.empty()
-    buttons_placeholder.empty()
+    st.session_state['image_placeholder'].empty()
+    st.session_state['buttons_placeholder'].empty()
 
     return st.session_state[f"last_frame_{obj_num}"], ImgBefore_save_path  # Return the captured frame and path
 
@@ -172,63 +179,109 @@ def classify_object(gpio, model_path, session_data, ImgBefore_path, obj_num):
 
     return detector.Detection
 
+
+
 def main_system():
+
     """Main function of the recycling system."""
-    proximity_sensor_pin = 17
-    model_path = os.path.join('.', 'runs', 'detect', 'train4_300ep_ReformedDataset', 'weights', 'best.pt')
+    
+    if not st.session_state.system_initialized:
+        st.session_state.proximity_sensor_pin = 17
+        st.session_state.model_path = os.path.join('.', 'runs', 'detect', 'final_model_150ep', 'weights', 'best.pt')
 
-    session_data = initialize_session_data()
-    session_dir = create_session_directory(session_data["session_id"])
-    session_data['session_dir'] = session_dir
-
+        st.session_state.session_data = initialize_session_data()
+        st.session_state.session_dir = create_session_directory(st.session_state.session_data["session_id"])
+        st.session_state.session_data['session_dir'] = st.session_state.session_dir
+        st.session_state.system_initialized = True
+    
     camera = cv2.VideoCapture(0)
     time.sleep(2)  # Allow the camera to warm up
-    
-    counter = 1 #The counter is used to keep track of the objects entered the system and save the images appropriately
+        
+    #The counter is used to keep track of the objects entered the system and save the images appropriately
+    if "counter" not in st.session_state: 
+        st.session_state.counter = 1
 
-    while True:
-        st.write(f"Processing object {counter}...")
-        image, CapturedImg_path = capture_image(camera, session_data, counter)
+
+    if st.session_state.session_active:
+
+        image, CapturedImg_path = capture_image(camera, st.session_state.session_data, st.session_state.counter)
         camera.release()
 
         if image is None:
             st.write("No image captured. Exiting...")
-            break
+            st.session_state.session_active = False
+            camera.release()
+            cv2.destroyAllWindows()
+            return
 
         # Preprocess image
-        ProcessedImg_path = image_preprocessing(CapturedImg_path, session_data, counter)
+        ProcessedImg_path = image_preprocessing(CapturedImg_path, st.session_state.session_data, st.session_state.counter)
 
         # Classify object
-        classification_result = classify_object(proximity_sensor_pin, model_path, session_data, ProcessedImg_path, counter)
+        classification_result = classify_object(st.session_state.proximity_sensor_pin, st.session_state.model_path, st.session_state.session_data, ProcessedImg_path, st.session_state.counter)
         st.write(f"Classification Result: {classification_result}")
 
         # Update analytics
-        session_data['analytics']['total_objects'] += 1
+        st.session_state.session_data['analytics']['total_objects'] += 1
         if classification_result == "Metal":
-            session_data['analytics']['metal_objects'] += 1
+            st.session_state.session_data['analytics']['metal_objects'] += 1
         else:
-            session_data['analytics']['plastic_objects'] += 1
+            st.session_state.session_data['analytics']['plastic_objects'] += 1
+
 
         # Display the before and after classification images to user
-        for obj in session_data["objects"]:
-            st.write(f"Object {counter}:")
-            col1, col2 = st.columns(2)
-            with col1:
-                st.image(obj['image_before'], caption="Before Classification", use_column_width=True)
-            with col2:
-                st.image(obj['image_after'], caption="After Classification", use_column_width=True)
-            st.write(f"Type: {obj['type']}")
-            st.write(f"Confidence: {obj['confidence']}")
+        results = st.empty()
 
-        # Ask if the user wants to continue
-        if not st.button(f"Process Another Object"):
-            save_session_data(session_data)
-            break
+        # Check if there are any objects in session data
+        if st.session_state.session_data["objects"]:
+            # Get the last object processed
+            last_obj = st.session_state.session_data["objects"][-1]  # Access the last object directly
 
-        counter += 1
 
-    camera.release()
-    cv2.destroyAllWindows()
+            with results.container():
+
+                # Display the last object's details and images
+                st.write(f"Session ID: {st.session_state.session_data['session_id']}")
+                st.write(f"Object {st.session_state.counter}:")
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.image(last_obj['image_before'], caption="Before Classification", use_column_width=True)
+                
+                with col2:
+                    st.image(last_obj['image_after'], caption="After Classification", use_column_width=True)
+                
+                st.write(f"Type: {last_obj['type']}")
+                st.write(f"Confidence: {last_obj['confidence']}")
+                
+        # Update counter and session active state
+        st.session_state.counter += 1 
+        st.session_state.session_active = False
+
+
+    # Display the buttons
+    buttons_placeholder2 = st.empty()
+
+    with buttons_placeholder2.container():
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            if st.button("Process Another Object"):
+                st.session_state.session_active = True
+                buttons_placeholder2.empty()
+                camera.release()
+                cv2.destroyAllWindows()
+                main_system()
+
+        with col2:
+            if st.button("Finish Session"):
+                save_session_data(st.session_state.session_data)
+                st.session_state.session_active = False  # Mark session as no longer active
+                st.session_state.session_complete = True  # Mark the session as complete
+                buttons_placeholder2.empty()
+                camera.release()
+                cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     main_system()
