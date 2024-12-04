@@ -9,6 +9,8 @@ The inductive proximity sensor is being used to detect metallic objects and the 
 - PS
 - METAL
 
+![System hardware](docs/Hardware/System_Hardware.jpg)
+
 User can interract with the system using a friendly UI developed with streamlit.
 
 **Demo Video:**
@@ -28,8 +30,8 @@ To reproduce the hardware of the system you can follow the schematics in the ded
 To reproduce the software of the system see the following steps:
 
 1. Install the project with git pull
-2. Install dependencies from requirements.txt ("pip install -r /path/to/requirements.txt")
-3. Run the streamlit app locally: "python -m streamlit run Main_Page.py"
+2. Install dependencies from requirements.txt (`pip install -r /path/to/requirements.txt`)
+3. Run the streamlit app locally: `python -m streamlit run Main_Page.py`
 
 **Notes:**
 - A schematic diagram explaining the flow of the system's software can be found in docs folder.
